@@ -4,8 +4,8 @@
 #include <ctype.h>
 #include "stack.h"
 #include "memory.h"
-#include "commands.h"
 #include "parser.h"
+#include "commands.h"
 
 #define NO_ERROR 0
 #define INPUT_ERROR 1
@@ -60,6 +60,12 @@ result vm(pars programm)
 			case LDC:
 				ldc(&top_pointer, programm.code[ip].arg.element); 
 				break;
+			case LDI:
+				result.error = ldi(&top_pointer); 
+				break;	
+			case STI:
+				result.error = sti(&top_pointer); 
+				break;	
 			case ST:
 			    if (programm.code[ip].arg.address >= current_memory_size)
 				{
@@ -94,7 +100,7 @@ result vm(pars programm)
 			    stack_top_element = pop_from_stack(&top_pointer);
 				if (stack_top_element)
 				{
-				    ip = br(programm.code, programm.code[ip].arg.label) - 1;
+				    ip = jmp(programm.code, programm.code[ip].arg.label) - 1;
 				}
 				break;
 			case HLT:

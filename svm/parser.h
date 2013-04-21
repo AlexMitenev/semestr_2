@@ -12,6 +12,7 @@ typedef enum
 	LDC,
 	ST,
 	LDI,
+	STI,
 	ADD,
 	SUB,
 	MUL,

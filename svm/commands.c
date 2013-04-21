@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
+#include "parser.h"
 #include "stack.h"
 #include "memory.h"
 #include "commands.h"
-#include "parser.h"
-#include "string.h"
 
 #define NO_ERROR 0
 #define FEW_DATA 4
@@ -29,9 +29,24 @@ int ldi(struct STACK ** top_pointer)
     }
 	else
 	{
-        int address = pop_from_stack(top_pointer);
+        unsigned int address = pop_from_stack(top_pointer);
 	    int element = get_memory_elem(address);
 		push_in_stack(top_pointer, element);
+	}
+	return error;
+}
+int sti(struct STACK ** top_pointer)
+{
+    int error = NO_ERROR;
+    if (stack_size() < 2) 
+    {
+	    error = FEW_DATA;
+    }
+	else
+	{
+        unsigned int address = pop_from_stack(top_pointer);
+	    int element = pop_from_stack(top_pointer);
+		set_memory_elem(element, address);
 	}
 	return error;
 }
@@ -193,22 +208,6 @@ int jmp (cmd* programm, char* label)
 	return ip;
 }
 
-int br (cmd* programm, char* label, struct STACK ** top_pointer)
-{
-    int error = NO_ERROR;
-	int i = 0;
-	int ip = 0;
-	while (programm[i].opcode != HLT)
-	{
-		if (!strcmp(programm[i].label_def, label))
-		{
-			ip = i;
-			break;
-		}
-		i++;
-	}
-	return ip;
-}
 //exit
 
 int hlt(struct STACK ** top_pointer)

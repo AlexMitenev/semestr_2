@@ -22,9 +22,21 @@ str input_string(FILE* f)
 	curr_string.eof = 0;
 	curr_string.string = (char*) malloc(sizeof(char) * INPUT_STR_SIZE);	
 	int k = 0;
+	int char_counter = 0;
     while (1)
 	{
-	    curr_string.string[k] = fgetc(f);		
+	    
+	    curr_string.string[k] = fgetc(f);
+        		
+		if (curr_string.string[k] == '\t') 
+		{
+		    curr_string.string[k] = ' ';
+		}
+		
+		if ((curr_string.string[k] != '\t') && (curr_string.string[k] != ' ') && (curr_string.string[k] != '\n'))
+		{
+		    char_counter++;
+		}
 		
 		if (curr_string.string[k] == '\n') 
 		{
@@ -45,6 +57,10 @@ str input_string(FILE* f)
 		    curr_string.string = (char *)realloc(curr_string.string, sizeof(char) * INPUT_STR_SIZE * ((k % INPUT_STR_SIZE) + 2));
 		}	
         k++;			
+	}
+	if (char_counter == 0) 
+	{
+	    curr_string.string[0] = 0;	
 	}
     return curr_string;
 }
@@ -110,8 +126,13 @@ pars parser(char* path)
 		programm.code[i].label_def = (char*) malloc (sizeof(char) * MAX_LABEL_SIZE);
 		programm.code[i].label_def[0] = 0;
 		j = 0;
-		//permit spaces
 		
+		if (string[0] == 0)
+		{
+			continue;
+		}
+		
+		//permit spaces
 		while(string[j] == ' ')
 		{
 		    j++;
@@ -187,6 +208,14 @@ pars parser(char* path)
 			    programm.error = WRONG_ARGUMENT;
 			}
 		}
+		else if (!strcmp(command_string, "ldi"))
+		{	
+		    programm.code[i].opcode = LDI;
+		}
+		else if (!strcmp(command_string, "sti"))
+		{	
+		    programm.code[i].opcode = STI;
+		}
 		else if (!strcmp(command_string, "ldc"))
 		{
 		    programm.code[i].opcode = LDC;
@@ -250,11 +279,6 @@ pars parser(char* path)
 		{
 		    programm.code[i].opcode = HLT;
 		}
-		
-		//printf("arg.%d\n", programm.code[i].arg.element);
-		//printf("com.%d\n", programm.code[i].opcode);
-		//printf("ldef.%s\n", programm.code[i].label_def);
-	    //printf("label.%s\n", programm.code[i].arg.label);
 		
 		free(argument_string);
 		free(command_string);		

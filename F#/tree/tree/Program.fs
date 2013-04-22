@@ -25,7 +25,7 @@ let rec findMin tree =
 
 let rec deleteElement tree n =
   match tree with
-    | Empty -> 
+    | Empty -> Empty
     | Node(value, left, right) when n < value -> Node(value, deleteElement left n, right)
     | Node(value, left, right) when n > value -> Node(value, left, deleteElement right n)
 

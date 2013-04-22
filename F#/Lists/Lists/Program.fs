@@ -31,9 +31,9 @@ let rec find l f =
     | [] -> None
 
 let map l f =
-  let res acc x =
+  let makeList acc x =
     addToEnd acc <| f x
-  let NewList = List.fold (res) [] l
+  let NewList = List.fold (makeList) [] l
   NewList
  
 //examples

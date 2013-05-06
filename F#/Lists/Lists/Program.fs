@@ -32,14 +32,18 @@ let rec find l f =
 
 let map l f = List.foldBack (fun x acc -> (f x) :: acc) l []
 
-let testAddToEnd = printfn "%A" (addToEnd [1;2;3;4;5] 6 = [1;2;3;4;5;6])
-let testAddToEndWithEmptyList = printfn "%A" (addToEnd [] 6 = [6])
-let testAppend = printfn "%A" (append [1;2;3] [4;5;6] = [1;2;3;4;5;6])
-let testAppendWithEmptyList = printfn "%A" (append [] [1;2;3] = [1;2;3])
-let testReverse = printfn "%A" (reverse [1;2;3] = [3;2;1])
-let testReverseWithEmptyList = printfn "%A" (reverse [] = [])
-let testFindWithFalse = printfn "%A" (find [1;2;3;4] isEven = Some 2)
-let testFindWithTrue = printfn "%A" (find [1;5;3;7] isEven = None)
-let testFindWithEmptyList = printfn "%A" (find [] isEven = None)
-let testMap = printfn "%A" (map [1;2;3] isEven = [false;true;false])
-let testMapWithEmptyList = printfn "%A" (map [] isEven = [])
+let test testName state1 state2=
+  if state1 <> state2 then printf "%s" "false. Problem in test:"
+                           printfn "%s" testName
+
+test "testAddToEnd" (addToEnd [1;2;3;4;5] 6)  [1;2;3;4;5;6]
+test "testAddToEndWithEmptyList" (addToEnd [] 6) [6]
+test "testAppend" (append [1;2;3] [4;5;6])  [1;2;3;4;5;6]
+test "testAppendWithEmptyList" (append [] [1;2;3]) [1;2;3]
+test "testReverse" (reverse [1;2;3]) [3;2;1]
+test "testReverseWithEmptyList" (reverse []) []
+test "testFindWithTrue" (find [1;2;3;4] isEven) (Some 2)
+test "testFindWithFalse" (find [1;5;3;7] isEven) None
+test "testFindWithEmptyList" (find [] isEven) None
+test "testMap" (map [1;2;3] isEven) [false;true;false]
+test "testMapWithEmptyList" (map [] isEven) []

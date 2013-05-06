@@ -1,17 +1,17 @@
-﻿//Alex Mitenev 2013
+//Alex Mitenev 2013
 
 let addToEnd l n = 
-  let l = n :: l
   let rec add l =
     match l with
-      | [ _ ] -> l
-      | hd::tl -> (List.head tl) :: (add(hd :: List.tail tl))
+      | [] -> n :: l
+      | hd::tl -> hd :: (add tl)
   add l   
 
 let rec append l1 l2 = 
-  match l2 with
-    | [] -> l1
-    | hd::tl -> append (addToEnd l1 hd) tl
+  match l1 with
+    | [ n ] -> n :: l2
+    | hd::tl -> hd :: (append tl l2)
+    | [] -> l2
   
 let reverse l =
   let l2 = []
@@ -21,24 +21,25 @@ let reverse l =
       |hd::tl ->  rev tl (hd::l2)
   rev l l2
 
-let isEven n = 
-  if n % 2 = 0 then true else false
+let isEven n =
+  n % 2 = 0
 
 let rec find l f =
     match l with
-    | hd::tl when f hd = true -> Some (hd)
-    | hd::tl when f hd = false -> find tl f
+    | hd::tl when f hd -> Some hd
+    | hd::tl when not <| f hd -> find tl f
     | [] -> None
 
-let map l f =
-  let makeList acc x =
-    addToEnd acc <| f x
-  let NewList = List.fold (makeList) [] l
-  NewList
- 
-//examples
-printfn "%A" <| addToEnd [1;2;3;4;5] 6
-printfn "%A" <| append [1;2;3;4;5] [1;2;3]
-printfn "%A" <| reverse [1;2;3]
-printfn "%A" <| find [1;2;3;4;5;6] isEven
-printfn "%A" <| map [1;2;3] isEven
+let map l f = List.foldBack (fun x acc -> (f x) :: acc) l []
+
+let testAddToEnd = printfn "%A" (addToEnd [1;2;3;4;5] 6 = [1;2;3;4;5;6])
+let testAddToEndWithEmptyList = printfn "%A" (addToEnd [] 6 = [6])
+let testAppend = printfn "%A" (append [1;2;3] [4;5;6] = [1;2;3;4;5;6])
+let testAppendWithEmptyList = printfn "%A" (append [] [1;2;3] = [1;2;3])
+let testReverse = printfn "%A" (reverse [1;2;3] = [3;2;1])
+let testReverseWithEmptyList = printfn "%A" (reverse [] = [])
+let testFindWithFalse = printfn "%A" (find [1;2;3;4] isEven = Some 2)
+let testFindWithTrue = printfn "%A" (find [1;5;3;7] isEven = None)
+let testFindWithEmptyList = printfn "%A" (find [] isEven = None)
+let testMap = printfn "%A" (map [1;2;3] isEven = [false;true;false])
+let testMapWithEmptyList = printfn "%A" (map [] isEven = [])

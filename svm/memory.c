@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "memory.h"
-#define SIZE_OF_MEMORY 256
+#define SIZE_OF_MEMORY 65536
 
 
 void memory_initialize()

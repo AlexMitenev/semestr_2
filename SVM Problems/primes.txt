@@ -1,0 +1,65 @@
+ldc 10001;  
+st 0;   
+ldc 1;  
+st 1;   
+ldc 3; 
+st 2;   
+ldc 2;
+st 4;   
+loop1:
+ld 0;
+ld 1;
+cmp;
+br loop2;
+jmp end;
+loop2:
+ldc 1;
+st 3;   
+xx:
+ld 3;
+ld 1;
+cmp;
+ldc 1;
+add;
+br xxxxx;
+ld 2;
+ld 3;
+ldc 3;
+add;
+ldi;
+mod;
+br xxxx;
+jmp xxx;
+xxxx:
+ld 3;
+ldc 1;
+add;
+st 3;
+jmp xx;
+xxxxx:
+ld 1;
+ldc 1;
+add;
+st 1;
+ld 2;
+ld 1;
+ldc 3;
+add;
+sti;
+ld 2;
+ldc 1;
+add;
+st 2;
+jmp loop1;
+xxx:  
+ld 2;
+ldc 1;
+add;
+st 2;
+jmp loop2;
+end:
+ld 0;
+ldc 3;
+add;
+ldi;
+hlt;

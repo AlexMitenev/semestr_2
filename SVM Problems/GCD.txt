@@ -1,5 +1,5 @@
-ldc 44;
-ldc 0;
+ldc 2330;
+ldc 3770;
 st 1;
 st 0;
 ld 0;

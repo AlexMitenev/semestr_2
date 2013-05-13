@@ -1,31 +1,13 @@
-﻿open System
+open System
 open Core.Operators
 
-let convertListToString list =
-  List.fold (fun (acc : string) elem -> acc + string(elem)) "" list
+let convertListToString list = List.fold (fun (acc : string) elem -> acc + string(elem)) "" list
 
 type BigNumber(s : string) =
 
-  //divide the line into integers of length 4
   let StringNumber = s
 
   member public this.ConvertToIntList =
-
-    (*let LengthFirstElem = (StringNumber.Length) % 4
-    let NumberElem = (StringNumber.Length - 1) / 4 + 1
-    let Number = Array.create NumberElem ""
-
-    let mutable k = 0
-    if LengthFirstElem <> 0 then
-      for i = 0 to LengthFirstElem - 1 do
-        Number.[0] <- Number.[0] + string(StringNumber.[i]) 
-      k <- 1
-    let NewCharNumber = StringNumber.Remove (0, LengthFirstElem)
-    for i = k to NumberElem - 1 do
-      for j = 1 to 4 do
-        Number.[i] <- Number.[i] + string(NewCharNumber.[(i - k) * 4 + j - 1])*)
-    
-    //Array.toList <| Array.map (Int32.Parse) Number
 
     let CharArrNumber = StringNumber.ToCharArray()
     let IntArrNumber = Array.map (fun x -> Int32.Parse (string x)) CharArrNumber  
@@ -35,7 +17,7 @@ type BigNumber(s : string) =
     this.ConvertToIntList
 
   member public this.Print =
-   printf "%s"  <| convertListToString(this.ConvertToIntList)
+   printfn "%s"  <| convertListToString(this.ConvertToIntList)
 
   member public this.Length =
     this.ConvertToIntList.Length
@@ -52,16 +34,19 @@ type BigNumber(s : string) =
 
 type Ariphmetics =
   
-  static member Balance(n1 : BigNumber, n2 : BigNumber)=
+  static member (+) (a:BigNumber, b:BigNumber) = Ariphmetics.Plus(a, b)
+  static member (-) (a:BigNumber, b:BigNumber) = Ariphmetics.Minus(a, b)
+
+  static member Balance(original : BigNumber, comparable : BigNumber)=
     
-    let listN1 = n1.Value
-    let listN2 = n2.Value
+    let listN1 = original.Value
+    let listN2 = comparable.Value
 
 
-    let balance (l1 : int list) (l2 : int list) =
-      let differense = l2.Length - l1.Length
+    let balance (originalList : int list) (comparableList : int list) =
+      let differense = comparableList.Length - originalList.Length
       let listOfDiff = [ for i in 1 .. differense -> 0 ]
-      let listAnswer = listOfDiff @ l1
+      let listAnswer = listOfDiff @ originalList
       listAnswer
 
     let stringAnswer = convertListToString <| balance listN1 listN2
@@ -89,13 +74,14 @@ type Ariphmetics =
     let BigSum = new BigNumber(stringNum)
     BigSum.deleteNulElem
 
-
-
   static member Minus(n1 : BigNumber, n2 : BigNumber) =
 
     let listN1 =  Ariphmetics.Balance(n1, n2).Value
     let listN2 =  Ariphmetics.Balance(n2, n1).Value
     
+    let sign x = if x < 0 then -1 else 0
+    let modul x = if x < 0 then x + 10 else x
+
     let sub (l1 : int list) (l2 : int list) =
       let listSub = List.foldBack2 (fun elem1 elem2 acc ->
                                     match acc with
@@ -109,13 +95,21 @@ type Ariphmetics =
     let BigSub = new BigNumber(stringNum)
     BigSub.deleteNulElem
 
-let BigN1 = new BigNumber("1000057560")
-let BigN2 = new BigNumber("100")
+  static member Multy(n1 : BigNumber, n2 : BigNumber) =
+    
+    let listN1 =  n1.Value
+    let listN2 =  n2.Value
+
+    let rec MulOneDigit x l1 = 
+      match x with
+      |0 -> new BigNum (ConvertToIntList l1)
+      |n when n > 0 -> new BigNum (ConvertToIntList <|l1 + (MulOneDigit (n - 1) l1))
+        
+
+
+let BigN1 = new BigNumber("9999999999999999999999999999999999999999999999999999999999999999999999")
+let BigN2 = new BigNumber("1")
 let sum = Ariphmetics.Plus (BigN1, BigN2)
 let sub = Ariphmetics.Minus (BigN1, BigN2)
 sub.Print
-
-
-
-
-                                  
+sum.Print

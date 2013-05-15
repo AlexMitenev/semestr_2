@@ -1,4 +1,4 @@
-﻿//Alex Mitenev 2013
+//Alex Mitenev 2013
 
 type Tree =
   | Empty
@@ -9,17 +9,18 @@ let rec addElement n tree =
     | Empty -> Node(n, Empty, Empty)
     | Node(value, left, right) when n < value -> Node(value, addElement n left, right)
     | Node(value, left, right) when n > value -> Node(value, left, addElement n right)
-    |Node(value, left, right) when n = value -> Node(value, left, right)
+    |Node(value, left, right) -> Node(value, left, right)
 
 let rec find tree n =
   match tree with
     | Empty -> false
     | Node(value, left, right) when n < value -> find left n
     | Node(value, left, right) when n > value -> find right n
-    | Node(value, left, right) when n = value -> true
+    | Node(value, left, right) -> true
 
-let rec findMin tree = 
+let rec findMin tree =
     match tree with
+      | Empty -> 0
       | Node(value, Empty, right) -> value
       | Node(value, left, right) -> findMin left
 
@@ -30,31 +31,30 @@ let rec deleteElement n tree =
     | Node(value, left, right) when n < value -> Node(value, deleteElement n left, right)
     | Node(value, left, right) when n > value -> Node(value, left, deleteElement n right)
 
-    | Node(value, Empty, Empty) when n = value -> Empty
-    | Node(value, Empty, Node(valNext, leftNext, rightNext)) when n = value -> Node(valNext, leftNext, rightNext)
-    | Node(value, Node(valNext, leftNext, rightNext), Empty) when n = value -> Node(valNext, leftNext, rightNext)
-    | Node(value, left,  right) when n = value -> Node(findMin right, left, deleteElement (findMin right) right)
+    | Node(value, Empty, Empty) -> Empty
+    | Node(value, Empty, Node(valNext, leftNext, rightNext)) -> Node(valNext, leftNext, rightNext)
+    | Node(value, Node(valNext, leftNext, rightNext), Empty) -> Node(valNext, leftNext, rightNext)
+    | Node(value, left, right) -> Node(findMin right, left, deleteElement (findMin right) right)
 
-let rec printSpases num =
-  match num with
-    |0 -> printf "%s" ""
-    |n when n < 0 -> printSpases 0
-    |n when n > 0 -> printf "%c" ' '
-                     printSpases (n - 1)
-
-let rec print tree offset = 
-  printSpases (offset - 2)
-  if offset <> 0 then
-    printf "%c" '|'
-    printf "%c" '_'
-    printf "%c" '_'
+let rec print tree offset =
+  let toString (l : bool list) =
+   List.foldBack(fun x acc ->
+                   if x then acc + "|  "
+                   else acc + "   ") 
+                   l                                             
+                   "" 
+  match offset with
+    | [] -> printf "%s" ""
+    | [_] -> printf "%s" "|__"
+    | hd::tl -> printf "%s" <| toString tl
+                printf "%s" "|__"
+                  
   match tree with
     | Empty ->printfn "%s" "Nill"
-    | Node(value, left, right) -> printfn "%d" value
-                                  //printSpases (offset)
-                                  //printfn "%c" '|'
-                                  print left (offset + 2)
-                                  print right (offset + 2)
+    | Node(value, left, right) -> 
+                                  printfn "%d" value
+                                  print left (true :: offset)
+                                  print right (false :: offset) 
 
 let MyTree =
   Empty
@@ -65,6 +65,4 @@ let MyTree =
   |> addElement 6
   |> addElement 2
   |> addElement 9
-  |> addElement 7
-  |> deleteElement 5
-print MyTree 0
+print MyTree []

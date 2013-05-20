@@ -30,7 +30,7 @@ int ldi(struct STACK ** top_pointer)
 	else
 	{
         unsigned int address = pop_from_stack(top_pointer);
-	    int element = get_memory_elem(address);
+	   int element = get_memory_elem(address);
 		push_in_stack(top_pointer, element);
 	}
 	return error;

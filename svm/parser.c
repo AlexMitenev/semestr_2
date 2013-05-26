@@ -3,12 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "parser.h"
-
-#define NO_ERROR 0
-#define INPUT_ERROR 1
-#define BAD_CHAR 3
-#define BAD_END_OF_STRING 7
-#define WRONG_ARGUMENT 8
+#include "errors.h"
 
 #define MAX_CMD_SIZE 10
 #define CODE_SIZE 100
@@ -67,14 +62,7 @@ str input_string(FILE* f)
 
 int is_good_char(char c)
 {
-	if ((!isalpha(c)) && (c != ' ') && (c != ':') &&  (c != ';') && (!isdigit(c)))
-	{    
-		return 0;
-	}
-	else
-	{
-	    return 1;
-	}		
+	return ((isalpha(c)) || (c == ' ') || (c == ':') ||  (c == ';') || (isdigit(c)));	
 }
 
 int is_number(char* string)

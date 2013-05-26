@@ -1,24 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
+#include "ctype.h"
 #include "stack.h"
 #include "memory.h"
 #include "parser.h"
 #include "commands.h"
-
-#define NO_ERROR 0
-#define INPUT_ERROR 1
-#define BAD_CHAR 3
-#define FEW_DATA 4
-#define BAD_END 5
-#define DIVISION_BY_ZERO 6
-#define BAD_END_OF_STRING 7
-#define WRONG_ARGUMENT 8
-#define REPEAT_LABEL 9
-#define CANT_FIND_LABEL 10
-#define TOO_MANY_ARGS 11
-#define UNKNOWN_COMMAND 12
+#include "errors.h"
 
 #define MAX_LABEL_SIZE 10
 #define START_MEM_SIZE 256
@@ -174,43 +162,43 @@ int main(int argc, char* argv[])
 	
 	switch(result.error)
 	{
-	    case 0:
+	    case NO_ERROR:
 		    printf("%d", result.value);
 			break;
-		case 1:
+		case INPUT_ERROR:
 		    printf("error input file");
 			break;
-		case 2:
+		case SYNTAX_ERROR:
 		    printf("sintacsis error");
 			break;	
-		case 3:
+		case BAD_CHAR:
 		    printf("unknown simvol");
 			break;	
-		case 4:
+		case FEW_DATA:
 		    printf("few data");
 			break;	
-		case 5:
+		case BAD_END:
 		    printf("bad end of file");
 			break;
-		case 6:
+		case DIVISION_BY_ZERO:
 		    printf("devision by zero");
 			break;	
-        case 7:
+        case BAD_END_OF_STRING:
 		    printf("bad end of string");
 			break;	
-        case 8:
+        case WRONG_ARGUMENT:
 		    printf("wrong arguments");
 			break;			
-		case 9:
+		case REPEAT_LABEL:
 		    printf("repeat label");
 			break;
-		case 10:
+		case CANT_FIND_LABEL:
 		    printf("cant find label");
 			break;
-		case 11:
+		case TOO_MANY_ARGS:
 		    printf("too many arguments");
 			break;	
-		case 12:
+		case UNKNOWN_COMMAND:
 		    printf("unknown command");
 			break;
 	}

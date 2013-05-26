@@ -6,13 +6,8 @@
 #include "stack.h"
 #include "memory.h"
 #include "commands.h"
+#include "errors.h"
 
-#define NO_ERROR 0
-#define FEW_DATA 4
-#define BAD_END 5
-#define DIVISION_BY_ZERO 6
-#define REPEAT_LABEL 9
-#define CANT_FIND_LABEL 10
 //save-load commands
 
 void ldc(struct STACK ** top_pointer, int element)
